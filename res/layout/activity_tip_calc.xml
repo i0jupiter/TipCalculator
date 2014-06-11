@@ -1,0 +1,89 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="${packageName}.${activityClass}" >
+
+    <TextView
+        android:id="@+id/HowMuchTip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tipPicker"
+        android:layout_alignLeft="@+id/tipPicker"
+        android:layout_marginBottom="22dp"
+        android:text="@string/tvTip" />
+
+    <TextView
+        android:id="@+id/HowManyPeople"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/HowMuchTip"
+        android:layout_alignBottom="@+id/HowMuchTip"
+        android:layout_marginLeft="18dp"
+        android:layout_toRightOf="@+id/HowMuchTip"
+        android:text="@string/tvPeople" />
+
+    <NumberPicker
+        android:id="@+id/tipPicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="140dp"
+        android:layout_marginLeft="48dp" />
+
+    <EditText
+        android:inputType="numberDecimal"
+        android:singleLine="true"
+        android:imeOptions="actionDone"
+        android:id="@+id/etTransactionAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/HowMuchTip"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="33dp"
+        android:ems="10"
+        android:hint="@string/etAmountHint" >
+
+        <requestFocus />
+    </EditText>
+
+    <NumberPicker
+        android:id="@+id/userPicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/HowManyPeople"
+        android:layout_below="@+id/HowMuchTip"
+        android:layout_marginRight="16dp" />
+
+    <TextView
+        android:id="@+id/tvTipLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/etTransactionAmount"
+        android:layout_below="@+id/userPicker"
+        android:layout_marginTop="35dp"
+        android:text="@string/tvTipIs"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/tvTipAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tvTipLabel"
+        android:layout_alignRight="@+id/userPicker"
+        android:layout_toRightOf="@+id/tipPicker"
+        android:singleLine="true"
+        android:text="@string/tvTipValue"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <CheckBox
+        android:id="@+id/cbSaveValues"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvTipLabel"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="22dp"
+        android:text="@string/cbSaveDefaultValues" />
+
+</RelativeLayout>
