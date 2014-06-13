@@ -3,8 +3,8 @@
 
     <string name="app_name">Tip Calculator</string>
     <string name="tvTip">Percent tip?</string>
-    <string name="tvPeople">How many people?</string>
-    <string name="etAmountHint">$$</string>
+    <string name="etAmountHint">$$$</string>
+    <string name="tvPeople">How many ways?</string>
     <string name="tvTipIs">Tip is:</string>
     <string name="tvTipValue"></string>
     <string name="cbSaveDefaultValues">Save tip and user selection</string>

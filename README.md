@@ -1,3 +1,17 @@
+Update on 6/12/14:
+
+ - Fixed a couple of bugs:
+   - app was crashing when Home button was pressed
+   - preset tip percentage and number of people were not loaded from the file correctly
+ - Changed IDs of the different views to adhere to the naming convention
+ - Cleaned up the layout by editing the activity XML directly
+ - Added custom font
+ - Generated new GIF using LiceCap
+
+/!\ Note: Couldn't get images to work within TextView properly, as described in https://github.com/thecodepath/android_guides/wiki/Working-with-the-TextView#displaying-images-within-a-textview. Not sure if they can be scaled to fit the text area.
+
+
+
 This is an Android application to calculate tip for a given transaction amount, tip percentage, and number of users to split the tip with.
 
 Time spent: 6 hours in total

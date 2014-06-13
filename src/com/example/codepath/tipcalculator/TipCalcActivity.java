@@ -9,12 +9,14 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 
 import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.CheckBox;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.NumberPicker.OnValueChangeListener;
@@ -26,9 +28,12 @@ public class TipCalcActivity extends Activity {
 	private static final String TIP_FILE = "TipCalculator.txt";
 	
 	private EditText etTransactionAmount;
-	private NumberPicker tipPicker;
-	private NumberPicker userPicker;
+	private NumberPicker npTipPicker;
+	private NumberPicker npUserPicker;
 	private TextView tvTipAmount;
+	private TextView tvHowManyPeople;
+	private TextView tvHowMuchTip;
+	private TextView tvTipLabel;
 	private CheckBox cbSaveValues;
 	
 	@Override
@@ -37,42 +42,60 @@ public class TipCalcActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_tip_calc);
 		
+		// Create the TypeFace from the TTF asset
+		Typeface font = Typeface.createFromAsset(getAssets(), "fonts/AlexBrush-Regular.ttf");
+		
+		// Get all the labels to set font on them
+		tvHowManyPeople = (TextView) findViewById(R.id.tvHowManyPeople);
+		tvHowManyPeople.setTypeface(font);
+		tvHowMuchTip = (TextView) findViewById(R.id.tvHowMuchTip);
+		tvHowMuchTip.setTypeface(font);
+		tvTipLabel = (TextView) findViewById(R.id.tvTipLabel);
+		tvTipLabel.setTypeface(font);
+		
 		// Get the transaction amount
 		etTransactionAmount = (EditText) findViewById(R.id.etTransactionAmount);
+		etTransactionAmount.setTypeface(font);
 		
 		// The Save Values checkbox will be checked on app load if 
 		// a data file is present.
 		cbSaveValues = (CheckBox) findViewById(R.id.cbSaveValues);
 		File tipFile = new File(getFilesDir(), TIP_FILE);
 		cbSaveValues.setChecked(tipFile.exists());
+		cbSaveValues.setTypeface(font);
 		
 		// Get the tip percentage
-		tipPicker = (NumberPicker) findViewById(R.id.tipPicker);
-		tipPicker.setWrapSelectorWheel(true);
-		tipPicker.setMinValue(5);
-		tipPicker.setMaxValue(25);
+		npTipPicker = (NumberPicker) findViewById(R.id.npTipPicker);
+		npTipPicker.setWrapSelectorWheel(true);
+		npTipPicker.setMinValue(5);
+		npTipPicker.setMaxValue(25);
 		
 		// Get the number of users
-		userPicker = (NumberPicker) findViewById(R.id.userPicker);
-		userPicker.setWrapSelectorWheel(true);
-		userPicker.setMinValue(1);
-		userPicker.setMaxValue(25);
+		npUserPicker = (NumberPicker) findViewById(R.id.npUserPicker);
+		npUserPicker.setWrapSelectorWheel(true);
+		npUserPicker.setMinValue(1);
+		npUserPicker.setMaxValue(25);
 		
 		// If preset values exist, load them in tipPicker and userPicker
 		// Else set default values
+		boolean presetValuesFound = false;
 		if (tipFile.exists()) {
 			final List<Integer> values = readDataFromFile();
 			if (values.size() == 2) {
-				tipPicker.setValue(values.get(0).intValue());
-				userPicker.setValue(values.get(1).intValue());
+				presetValuesFound = true;
+				npTipPicker.setValue(values.get(0).intValue());
+				npUserPicker.setValue(values.get(1).intValue());
 			}
-		} else {
-			tipPicker.setValue(15);
-			userPicker.setValue(1);
+		}
+		if (!presetValuesFound) {
+			npTipPicker.setValue(15);
+			npUserPicker.setValue(1);
 		}
 		
 		// The file tip value will be displayed here.
 		tvTipAmount = (TextView) findViewById(R.id.tvTipAmount);
+		tvTipAmount.setTextColor(Color.BLUE);
+		tvTipAmount.setTypeface(font);
 		
 		// Automatically calculate tip on transaction amount change
 		takeActionOnTransactionAmountChange();
@@ -89,16 +112,19 @@ public class TipCalcActivity extends Activity {
 	
 	@Override
 	protected void onPause() {
+		super.onPause();
 		handleSaveValueCheckBox();
 	}
 	
 	@Override
 	protected void onStop() {
+		super.onStop();
 		handleSaveValueCheckBox();
 	}
 	
 	@Override
 	protected void onDestroy() {
+		super.onDestroy();
 		handleSaveValueCheckBox();
 	}
 	
@@ -139,11 +165,11 @@ public class TipCalcActivity extends Activity {
 	
 	// Automatically calculate the tip when the tip percentage is changed.
 	private void takeActionOnTipPercentageChange() {
-		tipPicker.setOnValueChangedListener(new OnValueChangeListener() {
+		npTipPicker.setOnValueChangedListener(new OnValueChangeListener() {
 			
 			@Override
 			public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-				tipPicker.setValue(newVal);
+				npTipPicker.setValue(newVal);
 				showCalculatedTip();
 			}
 		});
@@ -151,11 +177,11 @@ public class TipCalcActivity extends Activity {
 	
 	// Automatically calculate the tip when the number of users is changed.
 	private void takeActionOnNumberOfUserChange() {
-		userPicker.setOnValueChangedListener(new OnValueChangeListener() {
+		npUserPicker.setOnValueChangedListener(new OnValueChangeListener() {
 			
 			@Override
 			public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-				userPicker.setValue(newVal);
+				npUserPicker.setValue(newVal);
 				showCalculatedTip();
 			}
 		});
@@ -186,8 +212,8 @@ public class TipCalcActivity extends Activity {
 	private void showCalculatedTip() {
 		
 		final double transactionAmount = getTransactionAmount();
-		final int tipPercentage = tipPicker.getValue();
-		final int numUsers = userPicker.getValue();
+		final int tipPercentage = npTipPicker.getValue();
+		final int numUsers = npUserPicker.getValue();
 		
 		final double tipAmount = transactionAmount * tipPercentage / (100.0 * numUsers);
 		final String tipAmountToShow = String.format("$%s", new DecimalFormat("#0.00").format(tipAmount));
@@ -213,9 +239,9 @@ public class TipCalcActivity extends Activity {
 		
 		final File tipFile = new File(getFilesDir(), TIP_FILE);
 		try {
-			FileUtils.write(tipFile, Integer.toString(tipPicker.getValue())); // first line
+			FileUtils.write(tipFile, Integer.toString(npTipPicker.getValue())); // first line
 			FileUtils.writeStringToFile(tipFile, "\n", true); // append a newline
-			FileUtils.write(tipFile, Integer.toString(userPicker.getValue()), true); // second line
+			FileUtils.write(tipFile, Integer.toString(npUserPicker.getValue()), true); // second line
 		} catch (IOException ex) {
 			ex.printStackTrace();
 			Toast.makeText(this, "Error: Could not save values.", Toast.LENGTH_SHORT).show();
